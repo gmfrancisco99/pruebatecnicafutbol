@@ -19,6 +19,11 @@ public class EquipoServiceImpl implements EquipoService{
     }
 
     @Override
+    public List<Equipo> getAllEquiposByNombre(String nombre) {
+        return equipoRepository.findAllByNombreContainingIgnoreCase(nombre);
+    }
+
+    @Override
     public List<Equipo> getAllEquipos() {
         return (List<Equipo>) equipoRepository.findAll();
     }

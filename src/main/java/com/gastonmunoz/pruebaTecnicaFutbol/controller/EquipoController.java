@@ -17,6 +17,10 @@ public class EquipoController {
     public Equipo getEquipoById(@PathVariable("id") Integer equipoId){
         return equipoService.getEquipoById(equipoId).get();
     }
+    @GetMapping("/equipos/buscar")
+    public List<Equipo> getAllEquiposByNombre(@RequestParam String nombre){
+        return equipoService.getAllEquiposByNombre(nombre);
+    }
 
     @GetMapping("/equipos")
     public List<Equipo> getAllEquipos(){
