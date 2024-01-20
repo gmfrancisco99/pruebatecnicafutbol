@@ -1,6 +1,7 @@
 package com.gastonmunoz.pruebaTecnicaFutbol.service;
 
 import com.gastonmunoz.pruebaTecnicaFutbol.entity.Equipo;
+import com.gastonmunoz.pruebaTecnicaFutbol.exception.EquipoNotFoundException;
 import com.gastonmunoz.pruebaTecnicaFutbol.repository.EquipoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,13 @@ public class EquipoServiceImpl implements EquipoService{
     private EquipoRepository equipoRepository;
 
     @Override
-    public Optional<Equipo> getEquipoById(Integer id) {
-        return equipoRepository.findById(id);
+    public Equipo getEquipoById(Integer id) {
+        Optional<Equipo> result = equipoRepository.findById(id);
+
+        if (!result.isPresent()){
+            throw new EquipoNotFoundException();
+        }
+        return result.get();
     }
 
     @Override
@@ -25,16 +31,21 @@ public class EquipoServiceImpl implements EquipoService{
 
     @Override
     public List<Equipo> getAllEquipos() {
-        return (List<Equipo>) equipoRepository.findAll();
+        return equipoRepository.findAll();
     }
 
     @Override
     public Equipo updateEquipo(Integer id, Equipo updateEquipo) {
-        return null;
+        boolean exists = equipoRepository.existsById(id);
+        if (!exists) throw new EquipoNotFoundException();
+        updateEquipo.setId(id);
+        return equipoRepository.save(updateEquipo);
     }
 
     @Override
     public void deleteEquipoById(Integer id) {
+        boolean exists = equipoRepository.existsById(id);
+        if (!exists) throw new EquipoNotFoundException();
         equipoRepository.deleteById(id);
     }
 }
