@@ -23,9 +23,18 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> handleEquipoNotFoundException(EquipoNotFoundException exc, WebRequest request){
         Map<String, Object> body = new HashMap<>();
         body.put("codigo", HttpStatus.NOT_FOUND.value());
-        body.put("mensaje", "Equipo no encontrado");
+        body.put("mensaje", exc.getMessage());
 
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InternalServerErrorException.class)
+    public ResponseEntity<?> handleInternalServerErrorException(InternalServerErrorException exc, WebRequest request){
+        Map<String,Object> body = new HashMap<>();
+        body.put("codigo", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        body.put("mensaje", exc.getMessage());
+
+        return  new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override

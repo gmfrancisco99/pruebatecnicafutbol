@@ -2,6 +2,7 @@ package com.gastonmunoz.pruebaTecnicaFutbol.service;
 
 import com.gastonmunoz.pruebaTecnicaFutbol.entity.Equipo;
 import com.gastonmunoz.pruebaTecnicaFutbol.exception.EquipoNotFoundException;
+import com.gastonmunoz.pruebaTecnicaFutbol.exception.InternalServerErrorException;
 import com.gastonmunoz.pruebaTecnicaFutbol.repository.EquipoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,22 +17,39 @@ public class EquipoServiceImpl implements EquipoService{
 
     @Override
     public Equipo getEquipoById(Integer id) {
-        Optional<Equipo> result = equipoRepository.findById(id);
-
-        if (!result.isPresent()){
-            throw new EquipoNotFoundException();
+        Optional<Equipo> result;
+        try{
+            result = equipoRepository.findById(id);
+            if (!result.isPresent()){
+                throw new EquipoNotFoundException();
+            }
+        } catch (Exception exception){
+            if (exception instanceof EquipoNotFoundException) throw exception;
+            else {
+                throw new InternalServerErrorException("Se ha producido un error inesperado");
+            }
         }
         return result.get();
     }
 
     @Override
     public List<Equipo> getAllEquiposByNombre(String nombre) {
-        return equipoRepository.findAllByNombreContainingIgnoreCase(nombre);
+        try{
+            return equipoRepository.findAllByNombreContainingIgnoreCase(nombre);
+        } catch (Exception exception){
+            throw new InternalServerErrorException("Se ha producido un error inesperado");
+        }
     }
 
     @Override
     public List<Equipo> getAllEquipos() {
-        return equipoRepository.findAll();
+        List<Equipo> result;
+        try {
+            result = equipoRepository.findAll();
+        } catch (Exception exception){
+            throw new InternalServerErrorException("Se ha producido un error inesperado");
+        }
+        return result;
     }
 
     @Override
@@ -44,8 +62,17 @@ public class EquipoServiceImpl implements EquipoService{
 
     @Override
     public void deleteEquipoById(Integer id) {
-        boolean exists = equipoRepository.existsById(id);
-        if (!exists) throw new EquipoNotFoundException();
-        equipoRepository.deleteById(id);
+        try {
+            boolean exists = equipoRepository.existsById(id);
+            if (!exists) throw new EquipoNotFoundException();
+            equipoRepository.deleteById(id);
+        }
+        catch (Exception exception){
+            if (exception instanceof EquipoNotFoundException){
+                throw exception;
+            } else {
+                throw new InternalServerErrorException("Se ha producido un error inesperado");
+            }
+        }
     }
 }

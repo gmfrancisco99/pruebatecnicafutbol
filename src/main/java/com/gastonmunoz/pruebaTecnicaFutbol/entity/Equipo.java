@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Data
@@ -18,11 +19,15 @@ public class Equipo {
     private Integer id;
 
     @NotBlank(message = "El nombre del equipo no debe estar vacío.")
+    @Length(max = 100, message = "El nombre no puede tener más de 100 caracteres.")
     private String nombre;
 
     @NotBlank(message = "La liga del equipo no debe estar vacía.")
+    @Length(max = 100, message = "La liga no puede tener más de 100 caracteres.")
     private String liga;
 
     @NotBlank(message = "El país del equipo no debe estar vacío.")
+    @Length(max = 100, message = "El país no puede tener más de 100 caracteres.")
     private String pais;
 }
+// TODO: Pasar los mensajes a un enum para mejor mantenimiento
