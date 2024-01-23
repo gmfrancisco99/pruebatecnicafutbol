@@ -7,3 +7,11 @@ CREATE TABLE EQUIPO (
 );
 
 CREATE INDEX equipos_nombre ON EQUIPO (NOMBRE);
+
+CREATE TABLE IF NOT EXISTS `USER` (
+    ID int not null PRIMARY KEY AUTO_INCREMENT,
+    USERNAME varchar (30) not null,
+    PASSWORD varchar (30) not null
+);
+
+CREATE INDEX IF NOT EXISTS users_username ON `USER` (USERNAME);

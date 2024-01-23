@@ -25,3 +25,7 @@ VALUES
     ('Besiktas JK', 'Süper Lig', 'Turquía'),
     ('SSC Napoli', 'Serie A', 'Italia'),
     ('Atlético Madrid', 'La Liga', 'España');
+
+INSERT INTO `USER` (USERNAME, PASSWORD)
+VALUES
+    ( 'usuario', '12345' );
