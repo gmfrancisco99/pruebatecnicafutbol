@@ -42,4 +42,6 @@ public class EquipoController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    //TODO: Add annotations with included message to ids path variables to validate them on the spot
+
 }

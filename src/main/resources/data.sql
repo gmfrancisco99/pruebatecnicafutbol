@@ -1,5 +1,5 @@
 INSERT INTO EQUIPO
-    (NOMBRE, PAIS, LIGA)
+    (NOMBRE, LIGA, PAIS)
 VALUES
     ('Real Madrid', 'La Liga', 'España'),
     ('FC Barcelona', 'La Liga', 'España'),

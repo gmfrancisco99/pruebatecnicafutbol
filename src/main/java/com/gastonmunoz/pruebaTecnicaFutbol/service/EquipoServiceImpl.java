@@ -20,14 +20,13 @@ public class EquipoServiceImpl implements EquipoService{
         Optional<Equipo> result;
         try{
             result = equipoRepository.findById(id);
-            if (!result.isPresent()){
+            if (result.isEmpty()){
                 throw new EquipoNotFoundException();
             }
+        } catch (EquipoNotFoundException exception){
+            throw exception;
         } catch (Exception exception){
-            if (exception instanceof EquipoNotFoundException) throw exception;
-            else {
-                throw new InternalServerErrorException("Se ha producido un error inesperado");
-            }
+            throw new InternalServerErrorException("Se ha producido un error inesperado");
         }
         return result.get();
     }
@@ -54,10 +53,16 @@ public class EquipoServiceImpl implements EquipoService{
 
     @Override
     public Equipo updateEquipo(Integer id, Equipo updateEquipo) {
-        boolean exists = equipoRepository.existsById(id);
-        if (!exists) throw new EquipoNotFoundException();
-        updateEquipo.setId(id);
-        return equipoRepository.save(updateEquipo);
+        try {
+            boolean exists = equipoRepository.existsById(id);
+            if (!exists) throw new EquipoNotFoundException();
+            updateEquipo.setId(id);
+            return equipoRepository.save(updateEquipo);
+        } catch (EquipoNotFoundException exception){
+           throw exception;
+        } catch (Exception exception){
+            throw new InternalServerErrorException("Se ha producido un error inesperado");
+        }
     }
 
     @Override
@@ -66,13 +71,10 @@ public class EquipoServiceImpl implements EquipoService{
             boolean exists = equipoRepository.existsById(id);
             if (!exists) throw new EquipoNotFoundException();
             equipoRepository.deleteById(id);
-        }
-        catch (Exception exception){
-            if (exception instanceof EquipoNotFoundException){
-                throw exception;
-            } else {
-                throw new InternalServerErrorException("Se ha producido un error inesperado");
-            }
+        } catch (EquipoNotFoundException exception){
+            throw exception;
+        } catch (Exception exception) {
+            throw new InternalServerErrorException("Se ha producido un error inesperado");
         }
     }
 }
