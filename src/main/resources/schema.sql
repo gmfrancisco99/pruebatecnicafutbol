@@ -1,4 +1,4 @@
-CREATE TABLE EQUIPO (
+CREATE TABLE EQUIPOS (
     ID int not null AUTO_INCREMENT,
     NOMBRE varchar(100) not null,
     LIGA varchar(100) not null,
@@ -6,7 +6,7 @@ CREATE TABLE EQUIPO (
     PRIMARY KEY (ID)
 );
 
-CREATE INDEX equipos_nombre ON EQUIPO (NOMBRE);
+CREATE INDEX equipos_nombre ON EQUIPOS (NOMBRE);
 
 CREATE TABLE IF NOT EXISTS USERS (
     ID int not null PRIMARY KEY AUTO_INCREMENT,
