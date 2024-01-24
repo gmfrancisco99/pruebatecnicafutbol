@@ -5,6 +5,9 @@ import com.gastonmunoz.pruebaTecnicaFutbol.entity.User;
 import com.gastonmunoz.pruebaTecnicaFutbol.entity.request.LoginReq;
 import com.gastonmunoz.pruebaTecnicaFutbol.entity.response.ErrorRes;
 import com.gastonmunoz.pruebaTecnicaFutbol.entity.response.LoginRes;
+import com.gastonmunoz.pruebaTecnicaFutbol.service.AuthService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,29 +23,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private JwtUtil jwtUtil;
-    public AuthController(AuthenticationManager authenticationManager, JwtUtil util){
-        this.authenticationManager = authenticationManager;
-        this.jwtUtil = util;
-    }
+    @Autowired
+    private AuthService authService;
 
     @PostMapping("/auth/login")
-    public ResponseEntity login(@RequestBody LoginReq loginReq) {
-        try{
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginReq.getUsername(), loginReq.getPassword()));
-            String username = authentication.getName();
-            User user = new User(username, "");
-            String token = jwtUtil.createToken(user);
-            LoginRes loginRes = new LoginRes(username, token);
-
+    public ResponseEntity login(@Valid @RequestBody LoginReq loginReq) {
+        try {
+            LoginRes loginRes =  authService.login(loginReq);
             return ResponseEntity.ok(loginRes);
         } catch (BadCredentialsException e){
-            ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, "Invalid username or password");
+            ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST.value(), "Nombre de usuario o contraseña inválidos");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         } catch (Exception e){
-            ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST, e.getMessage());
+            ErrorRes errorResponse = new ErrorRes(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
+    }
+
+    @PostMapping("/auth/register")
+    public User register(@Valid @RequestBody LoginReq loginReq) {
+        User newUser = authService.register(loginReq);
+        newUser.setId(null);
+        return newUser;
     }
 }

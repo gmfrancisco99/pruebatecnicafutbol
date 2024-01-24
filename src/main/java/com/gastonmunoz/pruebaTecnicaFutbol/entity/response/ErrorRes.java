@@ -7,6 +7,6 @@ import org.springframework.http.HttpStatus;
 @Data
 @AllArgsConstructor
 public class ErrorRes {
-    HttpStatus httpStatus;
-    String message;
+    Integer codigo;
+    String mensaje;
 }

@@ -30,4 +30,3 @@ public class Equipo {
     @Length(max = 100, message = "El país no puede tener más de 100 caracteres.")
     private String pais;
 }
-// TODO: Pasar los mensajes a un enum para mejor mantenimiento
